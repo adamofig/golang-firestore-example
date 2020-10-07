@@ -1,0 +1,108 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Adamo API",
+        "contact": {},
+        "license": {}
+    },
+    "paths": {
+        "/firestore/collection/{name}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Retrieves a collection on given Name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entity.Account"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "add by json account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "firebase"
+                ],
+                "summary": "Add a document",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Ejemplo words",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Add account",
+                        "name": "account",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/entity.EmptyModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entity.EmptyModel"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "entity.Account": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "example": "account name"
+                },
+                "uuid": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                }
+            }
+        },
+        "entity.EmptyModel": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 1
+                },
+                "property": {
+                    "type": "string",
+                    "example": "some value"
+                }
+            }
+        }
+    }
+}

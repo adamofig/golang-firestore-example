@@ -1,0 +1,72 @@
+definitions:
+  entity.Account:
+    properties:
+      id:
+        example: 1
+        format: int64
+        type: integer
+      name:
+        example: account name
+        type: string
+      uuid:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        format: uuid
+        type: string
+    type: object
+  entity.EmptyModel:
+    properties:
+      id:
+        example: 1
+        format: int64
+        type: integer
+      property:
+        example: some value
+        type: string
+    type: object
+info:
+  contact: {}
+  license: {}
+  title: Adamo API
+paths:
+  /firestore/collection/{name}:
+    get:
+      parameters:
+      - description: User ID
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Account'
+      summary: Retrieves a collection on given Name
+    post:
+      consumes:
+      - application/json
+      description: add by json account
+      parameters:
+      - description: Ejemplo words
+        in: path
+        name: name
+        required: true
+        type: string
+      - description: Add account
+        in: body
+        name: account
+        schema:
+          $ref: '#/definitions/entity.EmptyModel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.EmptyModel'
+      summary: Add a document
+      tags:
+      - firebase
+swagger: "2.0"

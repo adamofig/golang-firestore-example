@@ -1,0 +1,112 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>A static page</title>
+
+  <link rel="stylesheet" href="./static/css/style.css">
+</head>
+
+<body>
+  <h1>Palabras de aprendizaje</h1>
+
+  <a href="/swagger/index.html"> docs swagger</a>
+  <br>
+
+  Palabra <input id="word" type="text">
+  <br>
+  Significado <textarea id="meaning"> </textarea>
+  <br>
+  Oraciones <textarea id="sentences"></textarea>
+  <br>
+  Puntuación <input id="rating" type="number" max="10" , min="1">
+  <button onclick='postData()'>Registrar Nueva</button>
+  <hr>
+
+  <h2>Tabla de palabras registradas</h2>
+  <table id="tableRow">
+
+  </table>
+
+
+</body>
+<script>
+  console.log("Iniciando Script")
+
+  async function loadDataTable() {
+    console.log("Buscando la información");
+    response = await fetch("/firestore/collection/words");
+    data = await response.json();
+    console.log("Los datos son ", data);
+
+    html = `
+    <tr>
+      <th>Palabra</th>
+      <th>Significado</th>
+      <th>Oraciones</th>
+      <th>Puntuación</th>
+      <th>Acciones</th>
+    </tr>`;
+    
+    for (let word of data){
+      html += `
+      <tr>
+        <td>${word.word}</td>
+        <td>${word.meaning}</td>
+        <td>${word.sentences}</td>
+        <td>${word.rating}</td>
+        <td> <button onclick="deleteWord('${word.id}')">Eliminar</button> </td>
+      </tr>
+      `
+      // console.log("El html final es", html)
+      tableRow.innerHTML = html
+    }
+  }
+
+  // Se manda a llamar la función
+  loadDataTable()
+
+
+  async function postData() {
+    console.log("Post a los datos ", word.value, meaning.value, rating.value, sentences.value);
+    let dataPost = { word: word.value, meaning: meaning.value, rating: rating.value, sentences: sentences.value };
+    
+    const url = '/firestore/collection/words';
+
+    console.log("Los datos son ", dataPost, " a ", url);
+
+
+    response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(dataPost), 
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    result = await response.json()
+
+    console.log("El resultado fue ", result)
+
+    loadDataTable();
+  }
+
+  async function deleteWord(id){
+    isDelete = confirm("¿Esta seguro de eliminar?");
+    if(isDelete){
+      const url = '/firestore/collection/words/' + id;
+      
+      console.log("Eliminando registro de", url);
+
+      response = await fetch(url, { method: 'DELETE'});
+      result = await response.json();
+      console.log("Se debió eliminar el registro", result);
+      
+      loadDataTable();
+    }
+  }
+
+
+</script>
+
+</html>
